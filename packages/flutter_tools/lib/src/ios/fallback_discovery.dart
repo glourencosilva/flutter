@@ -74,11 +74,13 @@ class FallbackDiscovery {
     @required int hostVmservicePort,
     @required String packageName,
   }) async {
+    print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - start of discover');
     final Uri result = await _attemptServiceConnection(
       assumedDevicePort: assumedDevicePort,
       hostVmservicePort: hostVmservicePort,
       packageName: packageName,
     );
+    print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - after _attemptServiceConnection');
     if (result != null) {
       return result;
     }
@@ -159,12 +161,15 @@ class FallbackDiscovery {
     int attempts = 0;
     Exception firstException;
     while (attempts < 5) {
+      print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - start of vm service attempt');
       try {
         final VmService vmService = await _vmServiceConnectUri(
           assumedWsUri.toString(),
         );
+        print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - point 1');
         final VM vm = await vmService.getVM();
         for (final IsolateRef isolateRefs in vm.isolates) {
+          print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - point 2');
           final Isolate isolateResponse = await vmService.getIsolate(
             isolateRefs.id,
           );
@@ -179,6 +184,7 @@ class FallbackDiscovery {
           }
         }
       } on Exception catch (err) {
+        print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - catch $err');
         // No action, we might have failed to connect.
         firstException ??= err;
         _logger.printTrace(err.toString());

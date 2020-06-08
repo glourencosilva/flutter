@@ -190,6 +190,7 @@ void main() {
   // Still uses context for analytics and mDNS.
   testUsingContext('IOSDevice.startApp fails in debug mode when mDNS fails and '
     'when Observatory URI is malformed', () async {
+    print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - start');
     final FileSystem fileSystem = MemoryFileSystem.test();
     final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
       kDeployCommand,
@@ -234,6 +235,7 @@ void main() {
     )).called(1);
     verify(globals.flutterUsage.sendEvent('ios-handshake', 'mdns-failure')).called(1);
     verify(globals.flutterUsage.sendEvent('ios-handshake', 'fallback-failure')).called(1);
+    print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - test end.');
     }, overrides: <Type, Generator>{
       MDnsObservatoryDiscovery: () => MockMDnsObservatoryDiscovery(),
       Usage: () => MockUsage(),

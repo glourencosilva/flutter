@@ -432,6 +432,7 @@ class IOSDevice extends Device {
         flutterUsage: globals.flutterUsage,
         pollingDelay: fallbackPollingDelay,
       );
+      print('${DateTime.now().second + (DateTime.now().millisecond / 1000)} - about to start fallbackDiscovery');
       final Uri localUri = await fallbackDiscovery.discover(
         assumedDevicePort: assumedObservatoryPort,
         deivce: this,
